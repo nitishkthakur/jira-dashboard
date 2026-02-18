@@ -13,7 +13,6 @@ from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import pandas as pd
-from flask_caching import Cache
 
 from config import Config
 from data import JiraClient, DataProcessor
@@ -118,12 +117,6 @@ app.index_string = '''
 </html>
 '''
 
-# Configure caching
-cache = Cache(app.server, config={
-    'CACHE_TYPE': 'simple',
-    'CACHE_DEFAULT_TIMEOUT': Config.CACHE_TIMEOUT
-})
-
 # Global variables
 jira_client = None
 issues_df = pd.DataFrame()
@@ -149,7 +142,6 @@ def initialize_jira_client():
         return False
 
 
-@cache.memoize(timeout=Config.CACHE_TIMEOUT)
 def fetch_and_process_data():
     """Fetch issues from JIRA and process them."""
     global jira_client, issues_df
@@ -502,7 +494,6 @@ app.layout = html.Div([
 )
 def update_data(n_clicks, n_intervals):
     """Fetch and store data."""
-    cache.clear()
     df = fetch_and_process_data()
     
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
