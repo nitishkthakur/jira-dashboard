@@ -61,7 +61,7 @@ class DataProcessor:
     @staticmethod
     def filter_overdue(df: pd.DataFrame) -> pd.DataFrame:
         """Filter DataFrame to only overdue issues."""
-        return df[df['is_overdue'] == True].copy()
+        return df[df['is_overdue']].copy()
     
     @staticmethod
     def filter_due_this_week(df: pd.DataFrame) -> pd.DataFrame:

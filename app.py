@@ -449,8 +449,10 @@ def update_urgency_chart(data, status_filter, priority_filter, assignee_filter, 
 
 
 @app.callback(
-    Output('issues-table', 'data'),
-    Output('issues-table', 'columns'),
+    [
+        Output('issues-table', 'data'),
+        Output('issues-table', 'columns')
+    ],
     [
         Input('data-store', 'data'),
         Input('status-filter', 'value'),
