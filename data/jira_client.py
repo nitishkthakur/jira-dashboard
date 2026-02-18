@@ -24,10 +24,10 @@ class JiraClient:
         try:
             Config.validate()
             
-            # Create JIRA client with basic auth (email + API token)
+            # Create JIRA client with basic auth (username + password)
             self.jira = JIRA(
                 server=Config.JIRA_URL,
-                basic_auth=(Config.JIRA_EMAIL, Config.JIRA_API_TOKEN)
+                basic_auth=(Config.JIRA_USERNAME, Config.JIRA_PASSWORD)
             )
             
             logger.info(f"Connected to JIRA: {Config.JIRA_URL}")
@@ -60,12 +60,15 @@ class JiraClient:
             raise RuntimeError("JIRA client not connected")
         
         # Use configured projects if not specified
-        if not project_keys:
+        if project_keys is None:
             project_keys = Config.JIRA_PROJECT_KEYS
-        
-        # Build JQL query
-        project_clause = " OR ".join([f"project = {pk}" for pk in project_keys])
-        jql = f"({project_clause})"
+
+        # Build JQL query — omit project filter if no keys configured
+        if project_keys:
+            project_clause = " OR ".join([f"project = {pk}" for pk in project_keys])
+            jql = f"({project_clause})"
+        else:
+            jql = "issueType is not EMPTY"  # broadest valid JQL; matches all issues
         
         # Add custom filter if provided
         if jql_filter:

@@ -15,13 +15,15 @@ class Config:
     
     # JIRA API Configuration
     JIRA_URL = os.getenv('JIRA_URL')
-    JIRA_EMAIL = os.getenv('JIRA_EMAIL')
-    JIRA_API_TOKEN = os.getenv('JIRA_API_TOKEN')
-    JIRA_PROJECT_KEY = os.getenv('JIRA_PROJECT_KEY', 'PROJ')
+    JIRA_USERNAME = os.getenv('JIRA_USERNAME')
+    JIRA_PASSWORD = os.getenv('JIRA_PASSWORD')
+
+    # Optional: restrict to specific projects (comma-separated, e.g. PROJ1,PROJ2).
+    # If unset, all projects accessible to the user are fetched.
+    _raw_project_keys = os.getenv('JIRA_PROJECT_KEYS', '').strip()
+    JIRA_PROJECT_KEYS = [k.strip() for k in _raw_project_keys.split(',') if k.strip()]
+
     JIRA_MAX_RESULTS = int(os.getenv('JIRA_MAX_RESULTS', '1000'))
-    
-    # Support for multiple projects
-    JIRA_PROJECT_KEYS = os.getenv('JIRA_PROJECT_KEYS', JIRA_PROJECT_KEY).split(',')
     
     # Dashboard Configuration
     CACHE_TIMEOUT = int(os.getenv('CACHE_TIMEOUT', '900'))  # 15 minutes
@@ -40,7 +42,7 @@ class Config:
     @classmethod
     def validate(cls):
         """Validate required configuration."""
-        required = ['JIRA_URL', 'JIRA_EMAIL', 'JIRA_API_TOKEN']
+        required = ['JIRA_URL', 'JIRA_USERNAME', 'JIRA_PASSWORD']
         missing = [key for key in required if not getattr(cls, key)]
         
         if missing:
