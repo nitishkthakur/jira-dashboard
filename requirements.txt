@@ -1,0 +1,26 @@
+# Core Dashboard Framework
+dash==2.14.2
+dash-bootstrap-components==1.5.0
+plotly==5.18.0
+
+# JIRA API Integration
+jira==3.6.0
+requests==2.31.0
+
+# Data Processing
+pandas==2.1.4
+numpy==1.26.2
+
+# Caching and Performance
+Flask-Caching==2.1.0
+
+# Configuration Management
+python-dotenv==1.0.0
+
+# Date/Time Handling
+python-dateutil==2.8.2
+
+# Development Tools (optional)
+pytest==7.4.3
+black==23.12.1
+flake8==6.1.0
