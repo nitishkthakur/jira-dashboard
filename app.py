@@ -832,7 +832,7 @@ if __name__ == '__main__':
     else:
         logger.warning("Starting without JIRA connection - configure .env file")
     
-    app.run_server(
+    app.run(
         debug=Config.DEBUG,
         host=Config.HOST,
         port=Config.PORT
